@@ -12,7 +12,7 @@ struct ProductArray: Codable {
     let total, skip, limit: Int
 }
 
-struct Product: Codable {
+struct Product: Codable, Identifiable {
     let id: Int
     let title, description: String
     let price, discountPercentage, rating: Double
@@ -28,4 +28,10 @@ struct Product: Codable {
         images.first ?? Constants.randomImage
     }
     
+}
+
+struct ProductRow: Identifiable {
+    let title: String
+    let products: [Product]
+    let id = UUID().uuidString
 }
