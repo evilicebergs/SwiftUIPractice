@@ -22,4 +22,10 @@ struct Product: Codable {
     let weight: Int
     let images: [String]
     let thumbnail: String
+    let category: String?
+    
+    var image: String {
+        images.first ?? Constants.randomImage
+    }
+    
 }
