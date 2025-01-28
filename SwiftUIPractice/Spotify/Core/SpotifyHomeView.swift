@@ -118,7 +118,7 @@ struct SpotifyHomeView: View {
            return SpotifyNewReleaseCell(
                 imageName: firstProduct.image,
                 headline: firstProduct.brand,
-                subheadline: firstProduct.category?.capitalized,
+                subheadline: firstProduct.category.capitalized,
                 title: firstProduct.title,
                 subtitle: firstProduct.description,
                 onAddToPlaylistPressed: {

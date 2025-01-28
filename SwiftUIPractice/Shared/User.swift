@@ -18,5 +18,18 @@ struct User: Codable {
     let age: Int
     let email, phone, username, password: String
     let image: String
-    let height, weight: Double
+    
+    static var mock: User {
+        User(
+            id: 123,
+            firstName: "John",
+            lastName: "Doe",
+            age: 32,
+            email: "lohndoe@gmail.com",
+            phone: "0946284545",
+            username: "johnnyBoy43",
+            password: "hellYeah56",
+            image: Constants.randomImage
+        )
+    }
 }
