@@ -11,32 +11,21 @@ import SwiftfulUI
 
 struct ContentView: View {
     
-    @State private var users: [User] = []
-    @State private var products: [Product] = []
+    @Environment(\.router) var router
     
     var body: some View {
         List {
-            ForEach(products, id: \.id) { product in
-                Text(product.title)
+            Button("Open Spotify") {
+                router.showScreen(.fullScreenCover) { _ in
+                    SpotifyHomeView()
+                }
             }
         }
-        .padding()
-        .task {
-            await getData()
-        }
     }
-    
-    private func getData() async {
-        do {
-            users = try await DatabaseHelper().getUsers()
-            products = try await DatabaseHelper().getProducts()
-        } catch {
-            print(error)
-        }
-    }
-    
 }
 
 #Preview {
-    ContentView()
+    RouterView { _ in
+        ContentView()
+    }
 }
