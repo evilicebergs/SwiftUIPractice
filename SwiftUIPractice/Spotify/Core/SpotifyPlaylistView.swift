@@ -17,7 +17,6 @@ struct SpotifyPlaylistView: View {
     
     @State private var products: [Product] = []
     @State private var showheader: Bool = false
-    @State private var offset: CGFloat = 0
     
     var body: some View {
         ZStack {
@@ -32,7 +31,6 @@ struct SpotifyPlaylistView: View {
                         imageName: product.image
                     )
                     .readingFrame { frame in
-                        offset = frame.maxY
                         showheader = frame.maxY < 150 ? true : false
                     }
                     

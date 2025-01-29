@@ -42,12 +42,10 @@ struct SongRowCell: View {
                 .padding(16)
                 .onTapGesture {
                     onEllipsisClicked?()
-                    print("ellipsis tapped")
                 }
         }
         .onTapGesture {
             onCellTapped?()
-            print("cell tapped")
         }
     }
 }
