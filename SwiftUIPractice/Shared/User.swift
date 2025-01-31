@@ -12,17 +12,17 @@ struct UsersArray: Codable {
     let total, skip, limit: Int
 }
 
-struct User: Codable {
+struct User: Codable, Identifiable {
     let id: Int
     let firstName, lastName: String
     let age: Int
     let email, phone, username, password: String
     let image: String
-    let height: Int
+    let height: Double
     
     var work: String = "Worker at Some Job"
     var education: String = "Graduate Degree"
-    
+
     var aboutMe: String = "This is some data about me to know me better"
     
     var basics: [UserInterest] {
@@ -64,4 +64,18 @@ struct User: Codable {
             image: Constants.randomImage, height: 189
         )
     }
+    
+    enum CodingKeys: CodingKey {
+        case id
+        case firstName
+        case lastName
+        case age
+        case email
+        case phone
+        case username
+        case password
+        case image
+        case height
+    }
+    
 }
