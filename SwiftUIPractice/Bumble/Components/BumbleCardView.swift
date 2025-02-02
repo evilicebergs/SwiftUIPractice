@@ -112,6 +112,7 @@ struct BumbleCardView: View {
                         onCheckmarkPressed?()
                     }
             }
+            .foregroundStyle(.bumbleBlack)
             
             Text("Hide and Report")
                 .font(.headline)
@@ -157,6 +158,7 @@ struct BumbleCardView: View {
                 BumbleHeartView()
                 
                 Text("Send a Compliment")
+                    .foregroundStyle(.bumbleBlack)
                     .font(.caption)
                     .fontWeight(.semibold)
             }

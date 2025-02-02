@@ -30,6 +30,7 @@ struct BumbleChatPreviewCell: View {
                     if yourMove {
                         Text("YOUR MOVE")
                             .fontWeight(.semibold)
+                            .foregroundStyle(.bumbleBlack)
                             .font(.caption2)
                             .padding(.horizontal, 8)
                             .padding(.vertical, 4)

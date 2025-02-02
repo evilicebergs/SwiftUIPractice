@@ -6,9 +6,11 @@
 //
 
 import SwiftUI
+import SwiftfulRouting
 
 struct BumbleChatsView: View {
     
+    @Environment(\.router) var router
     @State private var allUsers: [User] = []
     
     var body: some View {
@@ -45,7 +47,7 @@ struct BumbleChatsView: View {
                 .padding(4)
                 .background(.black.opacity(0.00000001))
                 .onTapGesture {
-                    
+                    router.dismissScreen()
                 }
             
             Spacer()
@@ -60,6 +62,7 @@ struct BumbleChatsView: View {
         }
         .font(.title)
         .fontWeight(.medium)
+        .foregroundStyle(.bumbleBlack)
     }
     
     private var matchQueueSection: some View {
@@ -70,6 +73,7 @@ struct BumbleChatsView: View {
                 Text("(\(allUsers.count))")
                     .foregroundStyle(.bumbleGray)
             }
+            .foregroundStyle(.bumbleBlack)
             .padding(.horizontal, 16)
         
             ScrollView(.horizontal) {
@@ -100,6 +104,7 @@ struct BumbleChatsView: View {
                     Text("(Recent)")
                         .foregroundStyle(.bumbleGray)
                 }
+                .foregroundStyle(.bumbleBlack)
                 
                 Spacer()
                 
@@ -135,5 +140,7 @@ struct BumbleChatsView: View {
 }
 
 #Preview {
-    BumbleChatsView()
+    RouterView { _ in
+        BumbleChatsView()
+    }
 }
