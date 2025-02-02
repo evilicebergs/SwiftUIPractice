@@ -41,7 +41,7 @@ struct BumbleHomeView: View {
                             let isNext = (selectedIndex + 1) == index
                             
                             if isCurrent || isNext || isPrevious {
-                                let offsetValue = cardOffsets[user.id]
+                                let offsetValue = cardOffsets[index]
                                 
                                 userProfileCell(user: user, index: index)
                                     .zIndex(Double(allUsers.count - index))
@@ -68,8 +68,8 @@ struct BumbleHomeView: View {
     }
     
     private func userDidSelect(index: Int, isLike: Bool) {
-        let user = allUsers[index]
-        cardOffsets[user.id] = isLike
+       // let user = allUsers[index]
+        cardOffsets[index] = isLike
         
         selectedIndex += 1
     }
@@ -172,7 +172,7 @@ struct BumbleHomeView: View {
         )
         .withDragGesture(
             .horizontal,
-            minimumDistance: 70,
+            minimumDistance: 40,
             resets: true,
             animation: .default,
             rotationMultiplier: 1.05,
