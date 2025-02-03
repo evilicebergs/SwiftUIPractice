@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftfulUI
 
 struct NetflixHomeView: View {
     
@@ -19,46 +20,17 @@ struct NetflixHomeView: View {
     @State private var products: [Product] = []
     @State private var productRows: [ProductRow] = []
     
+    @State private var scrollViewOffset: CGFloat = 0
+    
     var body: some View {
         ZStack(alignment: .top) {
             Color.netflixBlack.ignoresSafeArea()
             
-            ScrollView(.vertical) {
-                VStack(spacing: 8) {
-                    Rectangle()
-                        .frame(height: fullHeaderHeight)
-                        .foregroundStyle(.clear)
-                    if let heroProduct {
-                        heroCell(product: heroProduct)
-                    }
-                    
-                    categoryRows
-                    
-                }
-            }
-            .scrollIndicators(.hidden)
+            gradientLayer
             
-            VStack {
-                header
-                    .padding(.horizontal, 16)
-                
-                NetflixFilterBarView(
-                    filters: filters,
-                    xmarkClicked: {
-                        selectedFilter = nil
-                    },
-                    onFilterClicked: { newFilter in
-                        selectedFilter = newFilter
-                    },
-                    selectedFilter: selectedFilter
-                )
-                .padding(.top, 4)
-                
-            }
-            .background(.blue)
-            .readingFrame { frame in
-                fullHeaderHeight = frame.height
-            }
+            scrollView
+            
+            fullHeader
             
         }
         .foregroundStyle(.netflixWhite)
@@ -80,7 +52,7 @@ struct NetflixHomeView: View {
                 for brand in allBrands {
                     if let brand {
                         //let sortedProducts = products.filter { $0.brand == brand }
-                        rows.append(ProductRow(title: brand.capitalized, products: products))
+                        rows.append(ProductRow(title: brand.capitalized, products: products.shuffled()))
                     }
                 }
                 productRows = rows
@@ -88,6 +60,24 @@ struct NetflixHomeView: View {
             }
         } catch {
             print(error)
+        }
+    }
+    
+    private var scrollView: some View {
+        ScrollViewWithOnScrollChanged(.vertical, showsIndicators: false) {
+            VStack(spacing: 8) {
+                Rectangle()
+                    .frame(height: fullHeaderHeight)
+                    .foregroundStyle(.clear)
+                if let heroProduct {
+                    heroCell(product: heroProduct)
+                }
+                
+                categoryRows
+                
+            }
+        } onScrollChanged: { offset in
+            scrollViewOffset = min(0, offset.y)
         }
     }
     
@@ -110,6 +100,55 @@ struct NetflixHomeView: View {
                     }
             }
             .font(.title2)
+        }
+    }
+    
+    private var gradientLayer: some View {
+        ZStack {
+            LinearGradient(colors: [.netflixDarkRed, .netflixBlack], startPoint: .top, endPoint: .bottom)
+                .ignoresSafeArea()
+        }
+        .frame(maxHeight: max(10, 400 + scrollViewOffset * 0.75))
+        .opacity(scrollViewOffset < -300 ? 0 : 1)
+        .animation(.easeInOut, value: scrollViewOffset)
+    }
+    
+    private var fullHeader: some View {
+        VStack {
+            header
+                .padding(.horizontal, 16)
+            
+            if scrollViewOffset > -30 {
+                NetflixFilterBarView(
+                    filters: filters,
+                    xmarkClicked: {
+                        selectedFilter = nil
+                    },
+                    onFilterClicked: { newFilter in
+                        selectedFilter = newFilter
+                    },
+                    selectedFilter: selectedFilter
+                )
+                .padding(.top, 4)
+                .transition(.move(edge: .top).combined(with: .opacity))
+            }
+        }
+        .padding(.bottom, 8)
+        .background(
+            ZStack {
+                if scrollViewOffset < -70 {
+                    Rectangle()
+                        .fill(.ultraThinMaterial)
+                        .brightness(-0.2)
+                        .ignoresSafeArea()
+                }
+            }
+        )
+        .animation(.smooth, value: scrollViewOffset)
+        .readingFrame { frame in
+            if fullHeaderHeight == 0 {
+                fullHeaderHeight = frame.height
+            }
         }
     }
     
