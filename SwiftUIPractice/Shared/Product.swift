@@ -27,6 +27,25 @@ struct Product: Codable, Identifiable {
         images.first ?? Constants.randomImage
     }
     
+    enum CodingKeys: CodingKey {
+        case id
+        case title
+        case description
+        case price
+        case discountPercentage
+        case rating
+        case stock
+        case brand
+        case weight
+        case images
+        case thumbnail
+        case category
+    }
+    
+    let recentlyAdded: Bool = {
+        return Int.random(in: 1...4) == 1
+    }()
+    
     static var mock: Product {
         Product(
             id: 123,

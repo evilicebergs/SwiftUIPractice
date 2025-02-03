@@ -29,25 +29,11 @@ struct NetflixHomeView: View {
                         .frame(height: fullHeaderHeight)
                         .foregroundStyle(.clear)
                     if let heroProduct {
-                        NetflixNewReleaseCell(
-                            title: heroProduct.title,
-                            imageName: heroProduct.image,
-                            isNetfixFilm: Bool.random(),
-                            categories: [heroProduct.category.capitalized, heroProduct.brand ?? ""]) {
-                                
-                            } onPlayPressed: {
-                                
-                            } onMyListPressed: {
-                                
-                            }
-
+                        heroCell(product: heroProduct)
                     }
                     
-                    ForEach(0..<20) { _ in
-                        Rectangle()
-                            .fill(.netflixRed)
-                            .frame(height: 200)
-                    }
+                    categoryRows
+                    
                 }
             }
             .scrollIndicators(.hidden)
@@ -69,6 +55,7 @@ struct NetflixHomeView: View {
                 .padding(.top, 4)
                 
             }
+            .background(.blue)
             .readingFrame { frame in
                 fullHeaderHeight = frame.height
             }
@@ -85,7 +72,7 @@ struct NetflixHomeView: View {
         do {
             if products.isEmpty {
                 currentUser = try await DatabaseHelper().getUsers().first
-                products = try await Array(DatabaseHelper().getProducts().prefix(8))
+                products = try await Array(DatabaseHelper().getProducts().prefix(10))
                 
                 var rows: [ProductRow] = []
                 let allBrands = Set(products.map({ $0.brand }))
@@ -123,6 +110,47 @@ struct NetflixHomeView: View {
                     }
             }
             .font(.title2)
+        }
+    }
+    
+    private func heroCell(product: Product) -> some View {
+            NetflixNewReleaseCell(
+                title: product.title,
+                imageName: product.image,
+                isNetfixFilm: Bool.random(),
+                categories: [product.category.capitalized, product.brand ?? ""]) {
+                    
+                } onPlayPressed: {
+                    
+                } onMyListPressed: {
+                    
+                }
+        }
+    
+    private var categoryRows: some View {
+        LazyVStack(spacing: 16) {
+            ForEach(productRows) { row in
+                VStack(alignment: .leading, spacing: 6) {
+                    Text(row.title)
+                        .font(.headline)
+                        .padding(.leading, 16)
+                    
+                    ScrollView(.horizontal) {
+                        LazyHStack {
+                            ForEach(Array(row.products.enumerated()), id: \.offset) { (index, product) in
+                                NetflixRowCell(
+                                    imageName: product.image,
+                                    title: product.title,
+                                    isRecentlyAdded: product.recentlyAdded,
+                                    topTenRanking: row.id == productRows[2].id ? index + 1 : nil
+                                )
+                            }
+                        }
+                        .padding(.leading, 16)
+                    }
+                    .scrollIndicators(.hidden)
+                }
+            }
         }
     }
 }
